@@ -11,4 +11,6 @@ import Foundation
 struct Gif {
     var originalUrl : URL?
     var fixedHeightUrl : URL?
+    var isFavorite = false
+    var gifID : String = ""
 }

@@ -15,24 +15,11 @@ class GiphyTrendingCell: UITableViewCell {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var favoriteButton: UIButton!
     var gif = Gif()
-    var giphyGif = UIImage() {
-        didSet {
-            activityIndicator.stopAnimating()
-            activityIndicator.alpha = 0
-            giphyImage.image = giphyGif
-        }
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.backgroundColor = .black
-        configureImage()
-//        self.observe("\(self.giphyGif.image)", options: [.initial, .new]) { (self, change) in
-//            self.giphyImage.image = self.giphyGif as! UIImage
-//        }
-//
-//        addObserver(self, forKeyPath: "self.giphyGif", options:[.initial , .new], context: nil)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -40,24 +27,31 @@ class GiphyTrendingCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-//    override class func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//        if keyPath == "self.giphyGif" {
-//                self.giphyImage.image = self.giphyGif
-//        }
-//    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        giphyImage.image = nil
+        if !gif.isFavorite {
+            favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
+        }
+        
+    }
     func configureImage() {
-        activityIndicator.alpha = 1
+       
         activityIndicator.startAnimating()
         guard let url = gif.fixedHeightUrl else {
             return
         }
-
         let task = URLSession.shared.dataTask(with: url as URL) { (data, response, error) in
             do {
                 if data != nil {
                 DispatchQueue.main.async {
                     if let image = UIImage.gif(data: data!){
-                        self.giphyGif = image
+                        
+                        self.giphyImage.image = image
+                        self.activityIndicator.stopAnimating()
+                        
                         } else { return }
                     }
                 }
@@ -67,7 +61,13 @@ class GiphyTrendingCell: UITableViewCell {
         task.resume()
     }
     @IBAction func favoriteButtonPressed(_ sender: Any) {
-        favoriteButton.imageView?.image = UIImage(named: "favoriteIconSelected")
-
+        if !gif.isFavorite {
+            gif.isFavorite = true
+            favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
+        } else {
+            gif.isFavorite = false
+            favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
+        }
     }
+
 }

@@ -50,6 +50,7 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
             cell.configureImage()
             return cell
         }
+
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 210
@@ -99,21 +100,23 @@ extension TrendingViewController {
                     let trendingData = jsonObject["data"] as! [Dictionary<String , Any>]
                     let pagination = jsonObject["pagination"] as! [String : Int]
                     let meta = jsonObject["meta"] as! [String : Any]
-                    
+                
                     for gifObject in trendingData {
+                        let id = gifObject["id"] as! String
                         let imageData = gifObject["images"] as! [String : Dictionary<String , String>]
 
                         let imageOriginal = imageData["original"]!
                         let originalUrl = imageOriginal["url"]!
                         
-                        let imageFixedHeight = imageData["fixed_height"]!
+                        let imageFixedHeight = imageData["fixed_height_downsampled"]!
                         let fixedHeightUrl = imageFixedHeight["url"]!
                         
-                        let gif = Gif(originalUrl: URL(string: originalUrl), fixedHeightUrl: URL(string: fixedHeightUrl))
+                        let gif = Gif(originalUrl: URL(string: originalUrl), fixedHeightUrl: URL(string: fixedHeightUrl), gifID: id)
                         dataArray.append(gif)
                     }
-                    self.trendingArray = dataArray
+                    
                     DispatchQueue.main.async {
+                        self.trendingArray = dataArray
                         self.trendingTableView.reloadData()
                     }
                 }

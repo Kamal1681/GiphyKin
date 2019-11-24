@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import ImageIO
 
 class GiphyTrendingCell: UITableViewCell {
-
+    
     @IBOutlet weak var giphyImage: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var favoriteButton: UIButton!
@@ -17,15 +18,17 @@ class GiphyTrendingCell: UITableViewCell {
     var giphyGif = UIImage() {
         didSet {
             activityIndicator.stopAnimating()
-            self.giphyImage.image = self.giphyGif
+            activityIndicator.alpha = 0
+            giphyImage.image = giphyGif
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.backgroundColor = .black
         configureImage()
-//        self.observe("\(self.giphyGif)", options: [.initial, .new]) { (self, change) in
+//        self.observe("\(self.giphyGif.image)", options: [.initial, .new]) { (self, change) in
 //            self.giphyImage.image = self.giphyGif as! UIImage
 //        }
 //
@@ -43,21 +46,23 @@ class GiphyTrendingCell: UITableViewCell {
 //        }
 //    }
     func configureImage() {
+        activityIndicator.alpha = 1
         activityIndicator.startAnimating()
         guard let url = gif.fixedHeightUrl else {
             return
         }
+
         let task = URLSession.shared.dataTask(with: url as URL) { (data, response, error) in
             do {
                 if data != nil {
                 DispatchQueue.main.async {
-                    if let image = UIImage(data: data!) {
+                    if let image = UIImage.gif(data: data!){
                         self.giphyGif = image
                         } else { return }
                     }
                 }
             }
- 
+
         }
         task.resume()
     }

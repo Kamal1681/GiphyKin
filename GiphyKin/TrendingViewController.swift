@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import PhotosUI
+
 
 let giphyApiKey = "q0suMTvOXQaaTWUzhHMoy0qCEo0xZmKw"
 let baseURLString = "https://api.giphy.com/v1/gifs"
@@ -23,6 +23,7 @@ class TrendingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         trendingTableView.delegate = self
         trendingTableView.dataSource = self
         searchTextField.delegate = self
@@ -44,7 +45,9 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             
             let cell = trendingTableView.dequeueReusableCell(withIdentifier: trendingReuseIdentifier, for: indexPath) as! GiphyTrendingCell
+            
             cell.gif = trendingArray[indexPath.row]
+            cell.configureImage()
             return cell
         }
     
@@ -91,6 +94,7 @@ extension TrendingViewController {
         let task = URLSession.shared.dataTask(with: url as URL) {(data, response, error) in
             do {
                 if data != nil {
+                    var dataArray = [Gif]()
                     let jsonObject = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
                     let trendingData = jsonObject["data"] as! [Dictionary<String , Any>]
                     let pagination = jsonObject["pagination"] as! [String : Int]
@@ -106,9 +110,9 @@ extension TrendingViewController {
                         let fixedHeightUrl = imageFixedHeight["url"]!
                         
                         let gif = Gif(originalUrl: URL(string: originalUrl), fixedHeightUrl: URL(string: fixedHeightUrl))
-                        self.trendingArray.append(gif)
-                        
+                        dataArray.append(gif)
                     }
+                    self.trendingArray = dataArray
                     DispatchQueue.main.async {
                         self.trendingTableView.reloadData()
                     }

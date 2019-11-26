@@ -2,7 +2,7 @@
 //  Gif.swift
 //  GiphyKin
 //
-//  Created by Kamal Maged on 2019-11-24.
+//  Created by Kamal Maged on 2019-11-25.
 //  Copyright © 2019 Kamal Maged. All rights reserved.
 //
 
@@ -13,4 +13,14 @@ struct Gif {
     var fixedHeightUrl : URL?
     var isFavorite = false
     var gifID : String = ""
+
 }
+
+enum Error : Swift.Error {
+    case invalidURL
+    case noData
+    case unknownAPIResponse
+    case generic
+}
+
+

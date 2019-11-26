@@ -30,7 +30,7 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sOR-FK-nEi">
                                                     <rect key="frame" x="30" y="16" width="260" height="128"/>
                                                 </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="kim-TD-pNx">
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="kim-TD-pNx">
                                                     <rect key="frame" x="150" y="70" width="20" height="20"/>
                                                     <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </activityIndicatorView>
@@ -58,6 +58,7 @@
                                             <outlet property="activityIndicator" destination="kim-TD-pNx" id="HQz-0g-GU2"/>
                                             <outlet property="favoriteButton" destination="Zs0-B1-9H8" id="91k-wB-BHZ"/>
                                             <outlet property="giphyImage" destination="sOR-FK-nEi" id="chD-pv-7Ge"/>
+                                            <segue destination="RLH-p1-anp" kind="show" identifier="ShowFullScreen" id="f2Y-6v-qp7"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -74,7 +75,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="KeD-as-GxT">
                         <nil key="title"/>
-                        <textField key="titleView" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" id="nE9-JV-rgl">
+                        <textField key="titleView" opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" id="nE9-JV-rgl">
                             <rect key="frame" x="23" y="5" width="164" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -108,6 +109,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kvt-Ha-tBa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="132" y="118.29085457271366"/>
+        </scene>
+        <!--Gif Full Screen View Controller-->
+        <scene sceneID="Lmu-7Z-lgt">
+            <objects>
+                <viewController id="RLH-p1-anp" customClass="GifFullScreenViewController" customModule="GiphyKin" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Bb2-Ga-hm8">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aot-bc-jFI">
+                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="BMY-hJ-loV">
+                                <rect key="frame" x="150" y="274" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="BMY-hJ-loV" firstAttribute="centerY" secondItem="Bb2-Ga-hm8" secondAttribute="centerY" id="5jH-Xb-85o"/>
+                            <constraint firstItem="aot-bc-jFI" firstAttribute="top" secondItem="3Va-3F-zp4" secondAttribute="top" id="91F-1G-wY4"/>
+                            <constraint firstItem="3Va-3F-zp4" firstAttribute="bottom" secondItem="aot-bc-jFI" secondAttribute="bottom" id="NTd-64-QrV"/>
+                            <constraint firstItem="BMY-hJ-loV" firstAttribute="centerX" secondItem="Bb2-Ga-hm8" secondAttribute="centerX" id="QEn-MK-WU2"/>
+                            <constraint firstItem="3Va-3F-zp4" firstAttribute="trailing" secondItem="aot-bc-jFI" secondAttribute="trailing" id="Vzu-Vb-3BX"/>
+                            <constraint firstItem="aot-bc-jFI" firstAttribute="leading" secondItem="3Va-3F-zp4" secondAttribute="leading" id="lgk-CY-oXh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3Va-3F-zp4"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="bx8-Vi-uCt"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="BMY-hJ-loV" id="kkZ-dL-qrl"/>
+                        <outlet property="fullScreen" destination="aot-bc-jFI" id="GLA-fx-BXa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CBk-sT-w2e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1993" y="116"/>
         </scene>
     </scenes>
     <resources>

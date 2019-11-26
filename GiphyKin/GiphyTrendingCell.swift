@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import ImageIO
 
 class GiphyTrendingCell: UITableViewCell {
     
@@ -38,28 +37,36 @@ class GiphyTrendingCell: UITableViewCell {
         
     }
     func configureImage() {
-       
+        activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         guard let url = gif.fixedHeightUrl else {
+            print(Error.invalidURL)
             return
         }
-        let task = URLSession.shared.dataTask(with: url as URL) { (data, response, error) in
-            do {
-                if data != nil {
+        URLSession.shared.dataTask(with: url as URL) { (data, response, error) in
+            if let error = error {
                 DispatchQueue.main.async {
-                    if let image = UIImage.gif(data: data!){
+                    print(error)
+                }
+              return
+            }
+                guard let data = data else {
+                    DispatchQueue.main.async {
+                        print(Error.noData)
+                    }
+                    return
+                }
+                DispatchQueue.main.async {
+                    if let image = UIImage.gif(data: data){
                         
                         self.giphyImage.image = image
                         self.activityIndicator.stopAnimating()
-                        
+                        self.activityIndicator.isHidden = true
                         } else { return }
                     }
-                }
-            }
-
+            }.resume()
         }
-        task.resume()
-    }
+        
     @IBAction func favoriteButtonPressed(_ sender: Any) {
         if !gif.isFavorite {
             gif.isFavorite = true

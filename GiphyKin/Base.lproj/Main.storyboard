@@ -125,6 +125,16 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mmY-0X-gve">
                                                     <rect key="frame" x="0.0" y="0.0" width="125" height="100"/>
                                                 </imageView>
+                                                <button contentMode="scaleAspectFit" fixedFrame="YES" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oV7-eO-srh">
+                                                    <rect key="frame" x="77" y="2" width="40" height="40"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="heartFilled">
+                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" weight="semibold"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="favoriteButtonPressed:" destination="p6t-zG-q0d" eventType="touchUpInside" id="Dp4-Md-cS0"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="mmY-0X-gve" firstAttribute="leading" secondItem="zMu-td-XIz" secondAttribute="leading" id="2Aa-eC-Aq9"/>
@@ -135,6 +145,7 @@
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="125" height="100"/>
                                         <connections>
+                                            <outlet property="favoriteButton" destination="oV7-eO-srh" id="62v-0y-kDG"/>
                                             <outlet property="image" destination="mmY-0X-gve" id="R0d-RL-NTG"/>
                                             <segue destination="e3m-49-AMA" kind="show" identifier="ShowFullScreenOffline" id="u7d-jF-rPK"/>
                                         </connections>
@@ -254,5 +265,6 @@
     <resources>
         <image name="favoriteView" width="50" height="50"/>
         <image name="heart" width="100" height="100"/>
+        <image name="heartFilled" width="100" height="100"/>
     </resources>
 </document>

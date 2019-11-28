@@ -8,10 +8,26 @@
 
 import UIKit
 
+protocol RemoveFromFavorites {
+    func didFavoriteButtonPressed(gifID: String)
+}
 class GiphyFavoritesCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
     
+    @IBOutlet weak var favoriteButton: UIButton!
     var gif = Gif()
     var gifOriginalData: Data?
+    var gifID: String = ""
+  
+    var delegate: RemoveFromFavorites?
+    
+    @IBAction func favoriteButtonPressed(_ sender: Any) {
+        
+        delegate?.didFavoriteButtonPressed(gifID: gifID)
+        self.awakeFromNib()
+        favoriteButton.removeFromSuperview()
+        
+    }
+
 }
 

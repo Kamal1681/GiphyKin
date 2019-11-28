@@ -54,7 +54,9 @@ class GifCoreDataInterface {
     func deleteGif(gifID: String) {
         let context = GifCoreDataInterface.container.viewContext
         dataArray = loadSavedData()
+        
         for object in dataArray {
+
             if object.gifID == gifID {
                 context.delete(object)
                 do {

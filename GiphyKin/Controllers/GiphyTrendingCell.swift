@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreData
-
 
 protocol FavoriteButtonHandle {
     func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell)
@@ -27,13 +25,8 @@ class GiphyTrendingCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        if favoriteButtonFlag {
-            favoriteButton.setImage(UIImage(named: "heartFilled"), for: .normal)
-        } else {
-            favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
-        }
+
         self.backgroundColor = .black
-        
         
     }
 
@@ -46,7 +39,6 @@ class GiphyTrendingCell: UITableViewCell {
         super.prepareForReuse()
         giphyImage.image = nil
         favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
-        
     }
     func configureImage() {
         activityIndicator.isHidden = false
@@ -82,7 +74,6 @@ class GiphyTrendingCell: UITableViewCell {
         }
         
     @IBAction func favoriteButtonPressed(_ sender: Any) {
-        
         delegate?.didFavoriteButtonPressed(gif: gif, cell: self)
     
     }

@@ -61,7 +61,9 @@ class FavoritesViewController: UIViewController {
 
 // MARK: - DataSource and Delegates
 
-extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, RemoveFromFavorites {
+
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return gifDataArray.count
@@ -72,7 +74,9 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
         let cell = favoritesCollectionView.dequeueReusableCell(withReuseIdentifier: favoritesReuseIdentifier, for: indexPath) as! GiphyFavoritesCell
         let imageData = gifDataArray[indexPath.row].fixedHeightSmallData
         cell.image.image = UIImage.gif(data: imageData)
+        cell.delegate = self
         cell.gifOriginalData = gifDataArray[indexPath.row].originalData
+        cell.gifID = gifDataArray[indexPath.row].gifID
         
         return cell
     }
@@ -102,6 +106,11 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
            return UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing).left
     }
+    
+        func didFavoriteButtonPressed(gifID: String) {
+            self.gifCoreData!.deleteGif(gifID: gifID)
+            favoritesCollectionView.reloadData()
+        }
 }
 
 // MARK: - Segues

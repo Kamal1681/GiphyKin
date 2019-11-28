@@ -13,6 +13,7 @@ struct Gif {
     var fixedHeightUrl : URL?
     var fixedHeightSmallUrl : URL?
     var gifID : String = ""
+    var isFavorite = false
 
 }
 

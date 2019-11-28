@@ -36,9 +36,15 @@ class FavoritesViewController: UIViewController {
     }
     
     @IBAction func clearFavorites(_ sender: Any) {
-        gifCoreData?.deleteRecords()
-        gifDataArray = []
-        favoritesCollectionView.reloadData()
+        let alertController = UIAlertController(title: "Warning", message: "This will delete all your favorite Gifs", preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default) { (alert) in
+            self.gifCoreData?.deleteRecords()
+            self.gifDataArray = []
+            self.favoritesCollectionView.reloadData()
+        }
+        alertController.addAction(alertAction)
+        alertController.addAction(UIAlertAction (title: "Cancel", style: .cancel))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     /*

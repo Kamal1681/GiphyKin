@@ -38,7 +38,11 @@ class GiphyTrendingCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         giphyImage.image = nil
-        
+        if favoriteButtonFlag {
+            favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
+        }
         
     }
     func configureImage() {

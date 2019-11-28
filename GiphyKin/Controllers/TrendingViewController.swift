@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 let giphyApiKey = "q0suMTvOXQaaTWUzhHMoy0qCEo0xZmKw"
 let baseURLString = "https://api.giphy.com/v1/gifs"
@@ -14,11 +15,13 @@ let baseURLString = "https://api.giphy.com/v1/gifs"
 class TrendingViewController: UIViewController {
     
     var giphyArray = [Gif]()
-    
+
     private let trendingReuseIdentifier = "GiphyTrendingCell"
     @IBOutlet weak var trendingTableView: UITableView!
     @IBOutlet weak var searchTextField: UITextField!
+    var notFoundLabel = UILabel()
     
+    let gifCoreData = GifCoreDataInterface()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,15 +33,15 @@ class TrendingViewController: UIViewController {
             return
         }
         giphyAPICall(url: giphyTrendingURL) {}
-        
-        // Do any additional setup after loading the view.
     }
 
 }
 
+
+
 // MARK: - DataSource and Delegates
 
-extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FavoriteButtonHandle {
     
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return giphyArray.count
@@ -47,7 +50,8 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             
             let cell = trendingTableView.dequeueReusableCell(withIdentifier: trendingReuseIdentifier, for: indexPath) as! GiphyTrendingCell
-            
+            cell.delegate = self
+
             cell.gif = giphyArray[indexPath.row]
             cell.configureImage()
             return cell
@@ -72,6 +76,8 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
             }
             giphyAPICall(url: giphyTrendingURL) {
                 activityIndicator.removeFromSuperview()
+                self.notFoundLabel.removeFromSuperview()
+                textField.resignFirstResponder()
             }
             return true
         }
@@ -84,21 +90,35 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
             activityIndicator.removeFromSuperview()
             if self.giphyArray.count == 0 {
                 self.trendingTableView.separatorStyle = .none
-                let notFoundlabel = UILabel(frame: CGRect(x: self.view.frame.width / 3, y: self.view.frame.height / 2, width: self.view.frame.width / 3, height: 75))
+                self.notFoundLabel = UILabel(frame: CGRect(x: self.view.frame.width / 3, y: self.view.frame.height / 2, width: self.view.frame.width / 3, height: 75))
                 
-                self.view.addSubview(notFoundlabel)
+                self.view.addSubview(self.notFoundLabel)
                 
-                notFoundlabel.text = "Gifs Not Found"
-                notFoundlabel.textColor = .black
-                notFoundlabel.adjustsFontSizeToFitWidth = true
-                self.view.bringSubviewToFront(notFoundlabel)
+                self.notFoundLabel.text = "Gifs Not Found"
+                self.notFoundLabel.textColor = .black
+                self.notFoundLabel.adjustsFontSizeToFitWidth = true
+                self.view.bringSubviewToFront(self.notFoundLabel)
             }
-            print("Found \(self.giphyArray.count) matching \(String(describing: textField.text))")
+            else {
+                self.notFoundLabel.removeFromSuperview()
+                print("Found \(self.giphyArray.count) matching \(String(describing: textField.text))")
+            }
+            
         }
-
             textField.resignFirstResponder()
             return true
         }
+    
+    func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell) {
+        self.gifCoreData.saveGifInFileSystem(gif)
+        cell.favoriteButtonFlag = !cell.favoriteButtonFlag
+        if cell.favoriteButtonFlag {
+            cell.favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
+        } else {
+            cell.favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
+        }
+        
+    }
 }
 
 // MARK: - Giphy API calls
@@ -155,11 +175,16 @@ extension TrendingViewController {
 
                          let imageOriginal = imageData["original"]!
                          let originalUrl = imageOriginal["url"]!
+                        
                          
                          let imageFixedHeight = imageData["fixed_height_downsampled"]!
                          let fixedHeightUrl = imageFixedHeight["url"]!
                          
-                         let gif = Gif(originalUrl: URL(string: originalUrl), fixedHeightUrl: URL(string: fixedHeightUrl), gifID: id)
+                         let imagedFixedHeightSmall = imageData["fixed_height_small"]!
+                         let fixedHeightSmallUrl = imagedFixedHeightSmall["url"]!
+                         
+                         
+                         let gif = Gif(originalUrl: URL(string: originalUrl), fixedHeightUrl: URL(string: fixedHeightUrl), fixedHeightSmallUrl: URL(string: fixedHeightSmallUrl), gifID: id)
                         
                          dataArray.append(gif)
                      }
@@ -184,6 +209,11 @@ extension TrendingViewController {
         if segue.identifier == "ShowFullScreen" {
             let fullScreen = segue.destination as! GifFullScreenViewController
             fullScreen.gif = (sender as! GiphyTrendingCell).gif
+        }
+        if segue.identifier == "ShowFavorites" {
+            let favoritesGrid = segue.destination as! FavoritesViewController
+            favoritesGrid.gifCoreData = self.gifCoreData
+            
         }
     }
     

@@ -7,6 +7,11 @@
 //
 
 import UIKit
+import CoreData
+
+protocol FavoriteButtonHandle {
+    func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell)
+}
 
 class GiphyTrendingCell: UITableViewCell {
     
@@ -14,11 +19,16 @@ class GiphyTrendingCell: UITableViewCell {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var favoriteButton: UIButton!
     var gif = Gif()
+    var favoriteButtonFlag = false
+    
+    var delegate: FavoriteButtonHandle?
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.backgroundColor = .black
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -29,10 +39,10 @@ class GiphyTrendingCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         giphyImage.image = nil
-        if !gif.isFavorite {
-            favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
-        } else {
+        if favoriteButtonFlag {
             favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
         }
         
     }
@@ -62,19 +72,16 @@ class GiphyTrendingCell: UITableViewCell {
                         self.giphyImage.image = image
                         self.activityIndicator.stopAnimating()
                         self.activityIndicator.isHidden = true
+                      
                         } else { return }
                     }
             }.resume()
         }
         
     @IBAction func favoriteButtonPressed(_ sender: Any) {
-        if !gif.isFavorite {
-            gif.isFavorite = true
-            favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
-        } else {
-            gif.isFavorite = false
-            favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
-        }
+    
+        delegate?.didFavoriteButtonPressed(gif: gif, cell: self)
+    
     }
 
 }

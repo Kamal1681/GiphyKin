@@ -15,6 +15,7 @@ import UIKit
 
 class GifCoreDataInterface {
     var dataArray = [GifData]()
+    
     static var container: NSPersistentContainer {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError("Could not convert delegate to AppDelegate") }
         appDelegate.saveContext()
@@ -51,7 +52,20 @@ class GifCoreDataInterface {
     }
     
     func deleteGif(gifID: String) {
-        
+        let context = GifCoreDataInterface.container.viewContext
+        dataArray = loadSavedData()
+        for object in dataArray {
+            if object.gifID == gifID {
+                context.delete(object)
+                do {
+                    try context.save()
+                }
+                catch {
+                    print(Error.noData)
+                }
+            }
+        }
+            
     }
     
     func deleteRecords() {

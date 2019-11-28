@@ -20,8 +20,9 @@ class TrendingViewController: UIViewController {
     @IBOutlet weak var trendingTableView: UITableView!
     @IBOutlet weak var searchTextField: UITextField!
     var notFoundLabel = UILabel()
-    
+    var favoriteButtonFlag = false
     let gifCoreData = GifCoreDataInterface()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,8 +52,9 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
             
             let cell = trendingTableView.dequeueReusableCell(withIdentifier: trendingReuseIdentifier, for: indexPath) as! GiphyTrendingCell
             cell.delegate = self
-
+            
             cell.gif = giphyArray[indexPath.row]
+            cell.gif.isFavorite = favoriteButtonFlag
             cell.configureImage()
             return cell
         }
@@ -94,7 +96,7 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
                 
                 self.view.addSubview(self.notFoundLabel)
                 
-                self.notFoundLabel.text = "Gifs Not Found"
+                self.notFoundLabel.text = "Gifs Not Found. Search Again"
                 self.notFoundLabel.textColor = .black
                 self.notFoundLabel.adjustsFontSizeToFitWidth = true
                 self.view.bringSubviewToFront(self.notFoundLabel)
@@ -112,13 +114,14 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
     func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell) {
         
         cell.favoriteButtonFlag = !cell.favoriteButtonFlag
+        favoriteButtonFlag = cell.favoriteButtonFlag
         if cell.favoriteButtonFlag {
-            cell.favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
+            cell.favoriteButton.setImage(UIImage(named: "heartFilled"), for: .normal)
             self.gifCoreData.saveGifInFileSystem(gif)
         } else {
 
             self.gifCoreData.deleteGif(gifID: gif.gifID)
-            cell.favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
+            cell.favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
         }
         
     }

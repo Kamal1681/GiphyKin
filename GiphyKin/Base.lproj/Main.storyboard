@@ -77,7 +77,7 @@
                     <navigationItem key="navigationItem" id="KeD-as-GxT">
                         <nil key="title"/>
                         <textField key="titleView" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" id="nE9-JV-rgl">
-                            <rect key="frame" x="73" y="5" width="164" height="34"/>
+                            <rect key="frame" x="23" y="5" width="164" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" returnKeyType="search"/>
@@ -136,7 +136,7 @@
                                         <size key="customSize" width="125" height="100"/>
                                         <connections>
                                             <outlet property="image" destination="mmY-0X-gve" id="R0d-RL-NTG"/>
-                                            <segue destination="RLH-p1-anp" kind="show" identifier="ShowFullScreen" id="baA-ZN-XN3"/>
+                                            <segue destination="e3m-49-AMA" kind="show" identifier="ShowFullScreenOffline" id="u7d-jF-rPK"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -151,7 +151,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="UTV-Vf-Es7"/>
                     </view>
-                    <navigationItem key="navigationItem" id="uaL-se-BSg"/>
+                    <navigationItem key="navigationItem" id="uaL-se-BSg">
+                        <barButtonItem key="rightBarButtonItem" title="Clear" id="BuG-Wd-jTW">
+                            <connections>
+                                <action selector="clearFavorites:" destination="oRq-X3-Bhd" id="0xM-xE-6Xy"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="favoritesCollectionView" destination="29d-ik-b1o" id="fzz-aU-QjV"/>
                     </connections>
@@ -159,6 +165,36 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pLv-7G-0e2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1057.5" y="812.32394366197184"/>
+        </scene>
+        <!--Gif Full Screen Offline View Controller-->
+        <scene sceneID="I4Q-b9-r9G">
+            <objects>
+                <viewController id="e3m-49-AMA" customClass="GifFullScreenOfflineViewController" customModule="GiphyKin" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1uF-gv-hoa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Gdz-1w-7ir">
+                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Gdz-1w-7ir" firstAttribute="leading" secondItem="XTJ-12-RHu" secondAttribute="leading" id="Ftw-3D-832"/>
+                            <constraint firstItem="XTJ-12-RHu" firstAttribute="bottom" secondItem="Gdz-1w-7ir" secondAttribute="bottom" id="LYf-Ys-Y8u"/>
+                            <constraint firstItem="Gdz-1w-7ir" firstAttribute="top" secondItem="XTJ-12-RHu" secondAttribute="top" id="ffr-i8-daI"/>
+                            <constraint firstItem="XTJ-12-RHu" firstAttribute="trailing" secondItem="Gdz-1w-7ir" secondAttribute="trailing" id="vpJ-R3-xyh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="XTJ-12-RHu"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="PhN-kH-JSI"/>
+                    <connections>
+                        <outlet property="fullScreen" destination="Gdz-1w-7ir" id="wFB-S2-B22"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qVR-HE-rKo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1995" y="815"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ftg-o0-Hwc">
@@ -219,7 +255,4 @@
         <image name="favoriteIcon" width="50" height="50"/>
         <image name="favoriteView" width="50" height="50"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="baA-ZN-XN3"/>
-    </inferredMetricsTieBreakers>
 </document>

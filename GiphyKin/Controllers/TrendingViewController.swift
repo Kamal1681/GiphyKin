@@ -110,11 +110,14 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
         }
     
     func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell) {
-        self.gifCoreData.saveGifInFileSystem(gif)
+        
         cell.favoriteButtonFlag = !cell.favoriteButtonFlag
         if cell.favoriteButtonFlag {
             cell.favoriteButton.setImage(UIImage(named: "favoriteIconSelected"), for: .normal)
+            self.gifCoreData.saveGifInFileSystem(gif)
         } else {
+
+            self.gifCoreData.deleteGif(gifID: gif.gifID)
             cell.favoriteButton.setImage(UIImage(named: "favoriteIcon"), for: .normal)
         }
         

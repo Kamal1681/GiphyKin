@@ -12,4 +12,6 @@ class GiphyFavoritesCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
     
     var gif = Gif()
+    var gifOriginalData: Data?
 }
+

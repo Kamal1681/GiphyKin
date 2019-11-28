@@ -29,25 +29,18 @@ class FavoritesViewController: UIViewController {
         layout.minimumLineSpacing = spacing
         layout.minimumInteritemSpacing = spacing
         self.favoritesCollectionView.collectionViewLayout = layout
+        self.favoritesCollectionView.backgroundColor = .black
         
-        loadSavedData()
+        gifDataArray =  gifCoreData!.loadSavedData()
         // Do any additional setup after loading the view.
     }
     
-    func loadSavedData() {
-        let request : NSFetchRequest<GifData> = GifData.fetchRequest()
-        let sort = NSSortDescriptor(key: "gifID", ascending: true)
-        request.sortDescriptors = [sort]
-        
-        do {
-            gifDataArray = try GifCoreDataInterface.container.viewContext.fetch(request)
-            print("Got \(gifDataArray.count) commits")
-    
-        } catch {
-            print("Fetch failed")
-        }
+    @IBAction func clearFavorites(_ sender: Any) {
+        gifCoreData?.deleteRecords()
+        gifDataArray = []
+        favoritesCollectionView.reloadData()
     }
-
+    
     /*
     // MARK: - Navigation
 
@@ -73,6 +66,7 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
         let cell = favoritesCollectionView.dequeueReusableCell(withReuseIdentifier: favoritesReuseIdentifier, for: indexPath) as! GiphyFavoritesCell
         let imageData = gifDataArray[indexPath.row].fixedHeightSmallData
         cell.image.image = UIImage.gif(data: imageData)
+        cell.gifOriginalData = gifDataArray[indexPath.row].originalData
         
         return cell
     }
@@ -108,9 +102,9 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
 
 extension FavoritesViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowFullScreen" {
-            let fullScreen = segue.destination as! GifFullScreenViewController
-            fullScreen.gif = (sender as! GiphyFavoritesCell).gif
+        if segue.identifier == "ShowFullScreenOffline" {
+            let fullScreen = segue.destination as! GifFullScreenOfflineViewController
+            fullScreen.gifOriginalData = (sender as! GiphyFavoritesCell).gifOriginalData
         }
     }
 }

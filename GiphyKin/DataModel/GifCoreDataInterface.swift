@@ -14,13 +14,14 @@ import UIKit
 // Saves and loads images from CoreData.
 
 class GifCoreDataInterface {
+    var dataArray = [GifData]()
     static var container: NSPersistentContainer {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError("Could not convert delegate to AppDelegate") }
         appDelegate.saveContext()
         return appDelegate.persistentContainer
     }
     
-    func saveGifInFileSystem(_ gif: Gif) -> GifData {
+    func saveGifInFileSystem(_ gif: Gif) {
         let gifData = insert(GifData.self, into: GifCoreDataInterface.container.viewContext)
         
         gifData.gifID = gif.gifID
@@ -46,9 +47,44 @@ class GifCoreDataInterface {
                 print(Error.noData)
             }
         }
-        
-        return gifData
+        return
     }
+    
+    func deleteGif(gifID: String) {
+        
+    }
+    
+    func deleteRecords() {
+    
+        let context = GifCoreDataInterface.container.viewContext
+
+        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "GifData")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+
+        do {
+            try context.execute(deleteRequest)
+            try context.save()
+        } catch {
+            print (Error.generic)
+        }
+    }
+    
+    func loadSavedData() -> [GifData] {
+        let request : NSFetchRequest<GifData> = GifData.fetchRequest()
+        let sort = NSSortDescriptor(key: "gifID", ascending: true)
+        request.sortDescriptors = [sort]
+        
+        
+        do {
+            dataArray = try GifCoreDataInterface.container.viewContext.fetch(request)
+            print("Got \(dataArray.count) commits")
+    
+        } catch {
+            print("Fetch failed")
+        }
+        return dataArray
+    }
+
     
     private func insert<T>(_ type: T.Type, into context: NSManagedObjectContext) -> T {
         return NSEntityDescription.insertNewObject(forEntityName: String(describing: T.self), into: context) as! T

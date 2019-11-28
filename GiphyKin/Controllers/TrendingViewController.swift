@@ -20,7 +20,7 @@ class TrendingViewController: UIViewController {
     @IBOutlet weak var trendingTableView: UITableView!
     @IBOutlet weak var searchTextField: UITextField!
     var notFoundLabel = UILabel()
-    var favoriteButtonFlag = false
+   
     let gifCoreData = GifCoreDataInterface()
     
     override func viewDidLoad() {
@@ -54,7 +54,7 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
             cell.delegate = self
             
             cell.gif = giphyArray[indexPath.row]
-            cell.gif.isFavorite = favoriteButtonFlag
+        
             cell.configureImage()
             return cell
         }
@@ -114,7 +114,7 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
     func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell) {
         
         cell.favoriteButtonFlag = !cell.favoriteButtonFlag
-        favoriteButtonFlag = cell.favoriteButtonFlag
+        
         if cell.favoriteButtonFlag {
             cell.favoriteButton.setImage(UIImage(named: "heartFilled"), for: .normal)
             self.gifCoreData.saveGifInFileSystem(gif)
@@ -172,8 +172,6 @@ extension TrendingViewController {
                      
                  let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as! [String : Any]
                      let trendingData = jsonObject["data"] as! [Dictionary<String , Any>]
-                     let pagination = jsonObject["pagination"] as! [String : Int]
-                     let meta = jsonObject["meta"] as! [String : Any]
                  
                      for gifObject in trendingData {
                          let id = gifObject["id"] as! String

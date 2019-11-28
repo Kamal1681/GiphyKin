@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-import FaveButton
+
 
 protocol FavoriteButtonHandle {
     func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell)
@@ -27,6 +27,11 @@ class GiphyTrendingCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        if favoriteButtonFlag {
+            favoriteButton.setImage(UIImage(named: "heartFilled"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
+        }
         self.backgroundColor = .black
         
         
@@ -40,11 +45,7 @@ class GiphyTrendingCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         giphyImage.image = nil
-        if gif.isFavorite {
-            favoriteButton.setImage(UIImage(named: "heartFilled"), for: .normal)
-        } else {
-            favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
-        }
+        favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
         
     }
     func configureImage() {
@@ -74,14 +75,6 @@ class GiphyTrendingCell: UITableViewCell {
                         self.giphyImage.image = image
                         self.activityIndicator.stopAnimating()
                         self.activityIndicator.isHidden = true
-                        
-                        let faveButton = FaveButton(
-
-                            frame: CGRect(x:((self.giphyImage.image!.size.width) - 10), y:((self.giphyImage.image!.size.height) - 10), width: 44, height: 44),
-                            faveIconNormal: UIImage(named: "heart")
-                        )
-                        faveButton.delegate = self
-                        self.addSubview(faveButton)
                         
                         } else { return }
                     }

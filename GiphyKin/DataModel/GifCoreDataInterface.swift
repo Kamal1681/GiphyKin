@@ -23,6 +23,12 @@ class GifCoreDataInterface {
     }
     
     func saveGifInFileSystem(_ gif: Gif) {
+        
+        for object in dataArray {
+            if object.gifID == gif.gifID {
+                return
+            }
+        }
         let gifData = insert(GifData.self, into: GifCoreDataInterface.container.viewContext)
         
         gifData.gifID = gif.gifID

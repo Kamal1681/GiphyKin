@@ -9,7 +9,7 @@
 import UIKit
 
 protocol RemoveFromFavorites {
-    func didFavoriteButtonPressed(gifID: String)
+    func didFavoriteButtonPressed(gifID: String, cell: GiphyFavoritesCell)
 }
 class GiphyFavoritesCell: UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
@@ -22,11 +22,7 @@ class GiphyFavoritesCell: UICollectionViewCell {
     var delegate: RemoveFromFavorites?
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {
-        
-        delegate?.didFavoriteButtonPressed(gifID: gifID)
-        self.awakeFromNib()
-        favoriteButton.removeFromSuperview()
-        
+        delegate?.didFavoriteButtonPressed(gifID: gifID, cell: self)
     }
 
 }

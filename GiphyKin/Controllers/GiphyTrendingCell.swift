@@ -5,7 +5,6 @@
 //  Created by Kamal Maged on 2019-11-24.
 //  Copyright © 2019 Kamal Maged. All rights reserved.
 //
-
 import UIKit
 
 protocol FavoriteButtonHandle {
@@ -18,14 +17,13 @@ class GiphyTrendingCell: UITableViewCell {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var favoriteButton: UIButton!
     var gif = Gif()
-    var favoriteButtonFlag = false
+
     var delegate: FavoriteButtonHandle?
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-
         self.backgroundColor = .black
         
     }
@@ -38,12 +36,18 @@ class GiphyTrendingCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         giphyImage.image = nil
-        favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
+        
     }
     func configureImage() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-
+        
+        if gif.isFavorite {
+            favoriteButton.setImage(UIImage(named: "heartFilled"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
+        }
+        
         guard let url = gif.fixedHeightUrl else {
             print(Error.invalidURL)
             return

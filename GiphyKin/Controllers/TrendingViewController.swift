@@ -5,7 +5,6 @@
 //  Created by Kamal Maged on 2019-11-22.
 //  Copyright © 2019 Kamal Maged. All rights reserved.
 //
-
 import UIKit
 import CoreData
 
@@ -41,7 +40,6 @@ class TrendingViewController: UIViewController {
 
 
 // MARK: - DataSource and Delegates
-
 extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FavoriteButtonHandle {
     
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -112,10 +110,15 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
         }
     
     func didFavoriteButtonPressed(gif: Gif, cell: GiphyTrendingCell) {
+        guard let indexPath = trendingTableView.indexPath(for: cell) else {
+            return
+        }
+        var isFavorite = giphyArray[indexPath.row].isFavorite
+
+        isFavorite = !isFavorite
+        giphyArray[indexPath.row].isFavorite = isFavorite
         
-        cell.favoriteButtonFlag = !cell.favoriteButtonFlag
-        
-        if cell.favoriteButtonFlag {
+        if isFavorite {
             cell.favoriteButton.setImage(UIImage(named: "heartFilled"), for: .normal)
             self.gifCoreData.saveGifInFileSystem(gif)
         } else {
@@ -124,11 +127,12 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
             cell.favoriteButton.setImage(UIImage(named: "heart"), for: .normal)
         }
         
+        
+        
     }
 }
 
 // MARK: - Giphy API calls
-
 extension TrendingViewController {
     
     func giphyTrendingURL() -> URL? {
@@ -207,7 +211,6 @@ extension TrendingViewController {
 }
 
 // MARK: - Segues
-
 extension TrendingViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowFullScreen" {

@@ -96,7 +96,7 @@ class GifCoreDataInterface {
         let sort = NSSortDescriptor(key: "gifID", ascending: true)
         request.sortDescriptors = [sort]
         
-        
+
         do {
             dataArray = try GifCoreDataInterface.container.viewContext.fetch(request)
             print("Got \(dataArray.count) commits")

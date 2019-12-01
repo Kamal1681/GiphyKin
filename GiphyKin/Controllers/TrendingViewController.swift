@@ -14,7 +14,7 @@ let baseURLString = "https://api.giphy.com/v1/gifs"
 class TrendingViewController: UIViewController {
     
     var giphyArray = [Gif]()
-
+    var gifDataArray = [GifData]()
     private let trendingReuseIdentifier = "GiphyTrendingCell"
     @IBOutlet weak var trendingTableView: UITableView!
     @IBOutlet weak var searchTextField: UITextField!
@@ -33,6 +33,7 @@ class TrendingViewController: UIViewController {
             return
         }
         giphyAPICall(url: giphyTrendingURL) {}
+        
     }
 
 }
@@ -52,7 +53,7 @@ extension TrendingViewController: UITableViewDelegate, UITableViewDataSource, UI
             cell.delegate = self
             
             cell.gif = giphyArray[indexPath.row]
-        
+            
             cell.configureImage()
             return cell
         }

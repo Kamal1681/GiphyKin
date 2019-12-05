@@ -23,6 +23,12 @@ class GifCoreDataInterface {
     }
     
     func saveGifInFileSystem(_ gif: Gif) {
+        
+        for object in dataArray {
+            if object.gifID == gif.gifID {
+                return
+            }
+        }
         let gifData = insert(GifData.self, into: GifCoreDataInterface.container.viewContext)
         
         gifData.gifID = gif.gifID
@@ -90,7 +96,7 @@ class GifCoreDataInterface {
         let sort = NSSortDescriptor(key: "gifID", ascending: true)
         request.sortDescriptors = [sort]
         
-        
+
         do {
             dataArray = try GifCoreDataInterface.container.viewContext.fetch(request)
             print("Got \(dataArray.count) commits")

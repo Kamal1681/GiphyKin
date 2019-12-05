@@ -107,9 +107,19 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
            return UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing).left
     }
     
-        func didFavoriteButtonPressed(gifID: String) {
+        func didFavoriteButtonPressed(gifID: String, cell: GiphyFavoritesCell) {
             self.gifCoreData!.deleteGif(gifID: gifID)
-            favoritesCollectionView.reloadData()
+            
+            guard let indexPath = favoritesCollectionView.indexPath(for: cell) else {
+                return
+            }
+            
+            favoritesCollectionView.performBatchUpdates({
+                gifDataArray.remove(at: indexPath.row)
+            }) { _ in
+                cell.favoriteButton.removeFromSuperview()
+                self.favoritesCollectionView.reloadData()
+            }
         }
 }
 

@@ -118,7 +118,7 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
                 gifDataArray.remove(at: indexPath.row)
             }) { _ in
                 cell.favoriteButton.removeFromSuperview()
-                self.favoritesCollectionView.reloadData()
+                self.favoritesCollectionView.reloadItems(at: [indexPath])
             }
         }
 }
